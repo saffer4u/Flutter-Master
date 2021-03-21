@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Answers extends StatelessWidget {
-  final String ansText;
+  final Map<String, Object> ansText;
   final Function ansChosen;
 
   Answers(this.ansText, this.ansChosen);
@@ -10,8 +10,8 @@ class Answers extends StatelessWidget {
     return Container(
       width: double.infinity,
       child: ElevatedButton(
-        child: Text(ansText),
-        onPressed: ansChosen,
+        child: Text(ansText['text']),
+        onPressed: () => ansChosen(ansText['score']),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import './answers.dart';
-import './question.dart';
+
+import './quiz.dart';
+import 'result.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,25 +11,50 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int _questionIndex = 0;
+  var _questionIndex = 0;
+  var _totalScore = 0;
 
   var _questions = [
     {
       'QuestionText': 'What is your Faverote animal',
-      'Answers': ['Dog', 'Elephent', 'Cat', 'Horse'],
+      'Answers': [
+        {'text': 'Dog', 'score': 10},
+        {'text': 'Elephent', 'score': 4},
+        {'text': 'Cat', 'score': 3},
+        {'text': 'Horse', 'score': 7},
+      ],
     },
     {
       'QuestionText': 'What is your Faverote Color',
-      'Answers': ['Black', 'Blue', 'Pink', 'Purpule'],
+      'Answers': [
+        {'text': 'Black', 'score': 5},
+        {'text': 'Blue', 'score': 8},
+        {'text': 'Pink', 'score': 9},
+        {'text': 'Purpule', 'score': 2},
+      ],
     },
     {
       'QuestionText': 'What is your Faverote Movie',
-      'Answers': ['Iron Man', 'Avenger', 'COCO', 'Sim Sim'],
+      'Answers': [
+        {'text': 'Iron Man', 'score': 2},
+        {'text': 'Avenger', 'score': 6},
+        {'text': 'COCO', 'score': 3},
+        {'text': 'Sim Sim', 'score': 8},
+      ],
     }
   ];
 
-  void _ansChosen() {
+  void _resetQuiz() {
     setState(() {
+      _totalScore = 0;
+      _questionIndex = 0;
+    });
+  }
+
+  void _ansChosen(int score) {
+    setState(() {
+      _totalScore += score;
+      print(_totalScore);
       _questionIndex = _questionIndex + 1;
     });
   }
@@ -42,19 +68,13 @@ class _MyAppState extends State<MyApp> {
             "Quiz App",
           ),
         ),
-        body: Container(
-          child: Column(
-            children: [
-              Question(
-                _questions[_questionIndex]['QuestionText'],
-              ),
-              ...(_questions[_questionIndex]['Answers'] as List<String>)
-                  .map((answer) {
-                return Answers(answer, _ansChosen);
-              }).toList(),
-            ],
-          ),
-        ),
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                ansChosen: _ansChosen,
+                questionIndex: _questionIndex,
+                questions: _questions,
+              )
+            : Result(_totalScore, _resetQuiz),
       ),
     );
   }
