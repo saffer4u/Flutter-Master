@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:revision/transaction.dart';
+import 'package:intl/intl.dart';
+import './transaction.dart';
 
 void main() => runApp(MyApp());
 
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
                     (tx) => Card(
                       child: ListTile(
                         title: Text(tx.title),
-                        subtitle: Text(tx.date.toString()),
+                        subtitle: Text(DateFormat.yMMMMd().format(tx.date)),
                         leading: CircleAvatar(
                           radius: 40,
                           child: Text(tx.amount.toString()),
