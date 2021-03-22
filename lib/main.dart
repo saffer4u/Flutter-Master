@@ -1,80 +1,61 @@
 import 'package:flutter/material.dart';
-
-import './quiz.dart';
-import 'result.dart';
+import 'package:revision/transaction.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  var _questionIndex = 0;
-  var _totalScore = 0;
-
-  var _questions = [
-    {
-      'QuestionText': 'What is your Faverote animal',
-      'Answers': [
-        {'text': 'Dog', 'score': 10},
-        {'text': 'Elephent', 'score': 4},
-        {'text': 'Cat', 'score': 3},
-        {'text': 'Horse', 'score': 7},
-      ],
-    },
-    {
-      'QuestionText': 'What is your Faverote Color',
-      'Answers': [
-        {'text': 'Black', 'score': 5},
-        {'text': 'Blue', 'score': 8},
-        {'text': 'Pink', 'score': 9},
-        {'text': 'Purpule', 'score': 2},
-      ],
-    },
-    {
-      'QuestionText': 'What is your Faverote Movie',
-      'Answers': [
-        {'text': 'Iron Man', 'score': 2},
-        {'text': 'Avenger', 'score': 6},
-        {'text': 'COCO', 'score': 3},
-        {'text': 'Sim Sim', 'score': 8},
-      ],
-    }
-  ];
-
-  void _resetQuiz() {
-    setState(() {
-      _totalScore = 0;
-      _questionIndex = 0;
-    });
-  }
-
-  void _ansChosen(int score) {
-    setState(() {
-      _totalScore += score;
-      print(_totalScore);
-      _questionIndex = _questionIndex + 1;
-    });
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final List<Transaction> _transactions = [
+      Transaction(
+        amount: 22,
+        date: DateTime.now(),
+        id: "id1",
+        title: "Shoes",
+      ),
+      Transaction(
+        amount: 55,
+        date: DateTime.now(),
+        id: "id2",
+        title: "Hat",
+      ),
+      Transaction(
+        amount: 173,
+        date: DateTime.now(),
+        id: "id3",
+        title: "Phone",
+      ),
+    ];
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text(
-            "Quiz App",
-          ),
+          title: Text("Personal Expences"),
         ),
-        body: _questionIndex < _questions.length
-            ? Quiz(
-                ansChosen: _ansChosen,
-                questionIndex: _questionIndex,
-                questions: _questions,
-              )
-            : Result(_totalScore, _resetQuiz),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Card(
+              child: Text("CHART!!"),
+            ),
+            Column(
+              children: _transactions
+                  .map(
+                    (tx) => Card(
+                      child: ListTile(
+                        title: Text(tx.title),
+                        subtitle: Text(tx.date.toString()),
+                        leading: CircleAvatar(
+                          radius: 40,
+                          child: Text(tx.amount.toString()),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ],
+        ),
       ),
     );
   }
